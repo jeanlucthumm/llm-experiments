@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "llm-experiments"
+version = "0.1.0"
+description = ""
+authors = ["Jean-Luc Thumm <jeanlucthumm@gmail.com>"]
+readme = "README.md"
+packages = [{include = "llm_experiments"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[virtualenvs]
+in-project = true
