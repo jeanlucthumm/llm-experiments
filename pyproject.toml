@@ -10,6 +10,9 @@ packages = [{include = "llm_experiments"}]
 python = "^3.11"
 langchain = "^0.0.270"
 openai = "^0.27.8"
+chromadb = "^0.4.6"
+sentence-transformers = "^2.2.2"
+tiktoken = "^0.4.0"
 
 
 [build-system]

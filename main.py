@@ -1,7 +1,13 @@
-from langchain import PromptTemplate, LLMChain
+from langchain import PromptTemplate, ConversationChain
 from langchain.llms import OpenAI
+from langchain.chains.conversation.memory import ConversationBufferMemory
+from langchain.callbacks import get_openai_callback
 import os
 import sys
+import enum
+
+from llm import OpenAIModel
+
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 if OPENAI_API_KEY is None:
@@ -13,7 +19,21 @@ Answer: Let's think step by step."""
 
 prompt = PromptTemplate(template=template, input_variables=["question"])
 
-llm = OpenAI()
+llm = OpenAI(model_name=OpenAIModel.CHEAP.value, temperature=0.2)
 
-llm_chain = LLMChain(prompt=prompt, llm=llm)
-print(llm_chain.run(input("Enter question: ")))
+
+def count_tokens(chain, query: str):
+    with get_openai_callback() as cb:
+        result = chain.run(query)
+        print(f"> {cb.total_tokens} tokens: ${cb.total_cost}")
+    return result
+
+
+conversation_buf = ConversationChain(llm=llm, memory=ConversationBufferMemory())
+
+while True:
+    try:
+        query = input("Q: ")
+    except EOFError:
+        break
+    print(f"A: {count_tokens(conversation_buf, query)}")
